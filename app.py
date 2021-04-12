@@ -37,8 +37,16 @@ app.layout = html.Div([
 def update_line_chart(verstrekkers, periodes):
     mask = data['Verstrekker'].isin(verstrekkers)
     mask2 = data['Rentevaste periode'].isin(periodes)
-    fig = px.line(data[mask & mask2], 
-        x="Jaar", y="Netto salaris na hypotheeklasten", color='Rentepercentage', line_group='Rentevaste periode')
+    data2 = data[mask & mask2]
+    jaren = data2["Jaar"]
+    restschuld_10 = data2[data2["Rentevaste periode"] == 10]["Restschuld"]
+    restschuld_20 = data2[data2["Rentevaste periode"] == 20]["Restschuld"]
+    netto_10 = data2[data2["Rentevaste periode"] == 10]["Netto salaris na hypotheeklasten"]
+    netto_20 = data2[data2["Rentevaste periode"] == 20]["Netto salaris na hypotheeklasten"]
+    fig = px.bar(data[mask & mask2], 
+        x='Jaar', y="Netto salaris na hypotheeklasten", color='Label', barmode="group", text='Netto salaris na hypotheeklasten')
+    # fig.add_bar(x=jaren, y=restschuld_10, name="Restschuld 20 jaar vast")
+    # fig.add_bar(x=jaren, y=restschuld_20, name="Restschuld 10 jaar vast")
     return fig
 
 if __name__ == '__main__':
